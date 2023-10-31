@@ -83,6 +83,17 @@ def use_all_categories_of_args(band, *members, is_active=True, **details):
     - print all arguments/parameters, including the keyword arguments/parameters, in one line
     """
 
+    print(details)
+    # print(**details)
+    print()
+
+    b = band + ':' if members else band + ';'
+    m = ', '.join([member for member in members if members]) + ';' if members else ''
+    a = 'active' if is_active else 'not active'
+    d = f'({", ".join([str(k) + ": " + str(v) for k, v in details.items()])})' if details else ''
+
+    print(b, m, a, d)
+
 
 #%%
 # Test use_all_categories_of_args(band, *members, is_active=True, **details)
