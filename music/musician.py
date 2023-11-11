@@ -230,6 +230,8 @@ class Singer(Musician):
         it also prints an additional message in the end.
         A call example:
             <singer>.play(song_title, *['Thank you!', 'You're wonderful!], love='We love you!')
+        Note that calling super().play() from this method should pass *args and **kwargs, not args and kwargs.
+        Here's why: https://stackoverflow.com/a/31197973.
         """
 
     def what_do_you_do(self):
