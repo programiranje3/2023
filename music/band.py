@@ -33,14 +33,15 @@ class Band:
     genres = ['rock', 'blues', 'soul']
 
     def __init__(self, name, *members, start=date.today(), end=date.today()):
+
+        # Code to check if the band name is specified correctly (possibly raises BandNameError)
+
         self.name = name
         self.members = members
         self.start = start
         self.end = end
 
         # self.__i = 0                                  # introduce and initialize iterator counter, self.__i
-
-        # Code to check if the band name is specified correctly (possibly raises BandNameError)
 
     def __str__(self):
         n = self.name + ':' if self.members else self.name

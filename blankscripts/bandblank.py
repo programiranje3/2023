@@ -33,9 +33,9 @@ class Band:
     def __init__(self, name, *members, start=date.today(), end=date.today()):
         pass
 
-        # self.__i = 0                                  # introduce and initialize iterator counter, self.__i
-
         # Code to check if the band name is specified correctly (possibly raises BandNameError)
+
+        # self.__i = 0                                  # introduce and initialize iterator counter, self.__i
 
     def __str__(self):
         pass
