@@ -18,6 +18,9 @@ from settings import *
 # The starting URL refers to articles about The Rolling Stones.
 start_url = 'https://ultimateclassicrock.com/search/?s=The%20Rolling%20Stones'
 
+# Location of the chromedriver used to work with selenium and Chrome
+chromedriver_location = r'C:\Users\Vladan\AppData\Local\Programs\Python\Python312\Scripts\chromedriver.exe'
+
 #%%
 # Create Response object from GET request, using requests.get(<url>, allow_redirects=False)
 
@@ -57,10 +60,6 @@ def get_soup(url: str) -> BeautifulSoup:
 #%%
 # Demonstrate getting a tag with specific attributes
 # using <BeautifulSoup object>.find('<tag>', {'<attribute>': '<value>'}); e.g., find the 'visually-hidden' tag.
-visually_hidden = soup.find('span', {'class': 'visually-hidden'})
-print(visually_hidden)
-# article_date = div_content.findNext('div', {'class': 'auth-date'}).findNext('time')
-# print(article_date)
 
 #%%
 # Demonstrate getting values of tag attributes,
@@ -85,7 +84,7 @@ print(visually_hidden)
 # # The driver should be downloaded from https://chromedriver.chromium.org/downloads.
 # # Then you need not provide the path of the driver, just run: driver = webdriver.Chrome().
 # # Alternatively, you can put the downloaded driver at a desired folder, e.g.
-# # M:\Vladan\Downloads\chromedriver.exe, and get the driver running:
+# # M:\Vladan\Downloads\chromedriver.exe, and get the driver by running:
 # # driver = webdriver.Chrome('M:\\Vladan\\Downloads\\chromedriver.exe')
 # # (Adapted from https://stackoverflow.com/a/60062969/1899061.)
 #
@@ -93,7 +92,7 @@ print(visually_hidden)
 # driver = webdriver.Chrome()
 
 # Alternatively, you can put the downloaded driver at a desired folder, e.g.
-# M:\Vladan\Downloads\chromedriver.exe, and get the driver running:
+# M:\Vladan\Downloads\chromedriver.exe, and get the driver by running:
 # driver = webdriver.Chrome('M:\\Vladan\\Downloads\\chromedriver.exe')
 
 # # Guidelines - a version from
@@ -112,26 +111,38 @@ print(visually_hidden)
 # # Guidelines - a version from
 # # https://stackoverflow.com/questions/64717302/deprecationwarning-executable-path-has-been-deprecated-selenium-python/69892580#69892580:
 # # The approach based on using the Service object.
+# # Before running the following line(s), make sure to download and unzip
+# # THE LATEST version of chromedriver (i.e., tho one compatible with your version of Chrome)
+# # and put chromedriver.exe in the Scripts subfolder of your Python installation folder,
+# # e.g. C:\Users\Vladan\AppData\Local\Programs\Python\Python310\Scripts.
+# # The driver should be downloaded from https://chromedriver.chromium.org/downloads.
 # # Create the required Service object explicitly, using the Service class constructor,
 # # and passing the absolute path of the chromedriver.exe.
 #
 # from selenium import webdriver
 # from selenium.webdriver.chrome.service import Service
 #
-# service = Service(r'C:\Users\Vladan\AppData\Local\Programs\Python\Python311\Scripts\chromedriver.exe')
+# service = Service(r'C:\Users\Vladan\AppData\Local\Programs\Python\Python312\Scripts\chromedriver.exe')
 # options = webdriver.ChromeOptions()
 # driver = webdriver.Chrome(service=service, options=options)
 
 # Guidelines - a version from
 # https://stackoverflow.com/a/69885677:
 # The approach based on using the Service object, but skips the ChromeOptions() object.
+# Before running the following line(s), make sure to download and unzip
+# THE LATEST version of chromedriver (i.e., tho one compatible with your version of Chrome)
+# and put chromedriver.exe in the Scripts subfolder of your Python installation folder,
+# e.g. C:\Users\Vladan\AppData\Local\Programs\Python\Python310\Scripts.
+# The driver should be downloaded from https://chromedriver.chromium.org/downloads.
 # Create the required Service object explicitly, using the Service class constructor,
 # and passing the absolute path of the chromedriver.exe.
+
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
-service = Service(r'C:\Users\Vladan\AppData\Local\Programs\Python\Python311\Scripts\chromedriver.exe')
+# service = Service(r'C:\Users\Vladan\AppData\Local\Programs\Python\Python312\Scripts\chromedriver.exe')
+service = Service(chromedriver_location)
 driver = webdriver.Chrome(service=service)
 
 # Once any of these approaches to get the Chrome driver is made to work,
@@ -160,7 +171,7 @@ def get_soup_selenium(url: str) -> BeautifulSoup:
 # Demonstrate occasional anomalies in the ResultSet returned by <BeautifulSoup object>.find_all(<tag>);
 # note that they may be appearing only in the selenium version, not in the requests version.
 
-# The following lines show that there are 11 articles on the page, not 10.
+# The following lines find all 'article' tags and show that there are 11 articles on the page, not 10.
 # The 11th one is something else, not visible on the page at the first glance and should be eliminated from
 # further processing.
 
@@ -233,15 +244,15 @@ def get_next_soup_selenium(start_url: str, page=1):
 
 
 #%%
-# Test get_next_soup(start_url: str, page=1)
+# Test get_next_soup_selenium(start_url: str, page=1)
 
 
 #%%
 def crawl(url: str, max_pages=1):
     """Web crawler that collects info about specific articles from Ultimate Classic Rock,
     implemented as a Python generator that yields BeautifulSoup objects (get_next_soup() or get_next_soup_selenium())
-    from multi-page movie lists.
-    Parameters: the url of the starting page and the max number of pages to crawl in case of multi-page lists.
+    from multi-page article lists.
+    Parameters: the url of the starting page and the max number of pages to crawl in case of multipage lists.
     """
 
 
