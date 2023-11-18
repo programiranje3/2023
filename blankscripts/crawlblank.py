@@ -59,7 +59,8 @@ def get_soup(url: str) -> BeautifulSoup:
 
 #%%
 # Demonstrate getting a tag with specific attributes
-# using <BeautifulSoup object>.find('<tag>', {'<attribute>': '<value>'}); e.g., find the 'visually-hidden' tag.
+# using <BeautifulSoup object>.find('<tag>', {'<attribute>': '<value>'});
+# e.g., find a 'span' tag with the 'visually-hidden' attribute.
 
 #%%
 # Demonstrate getting values of tag attributes,
@@ -190,7 +191,8 @@ def get_soup_selenium(url: str) -> BeautifulSoup:
 
 #%%
 # Demonstrate <tag>.find_next_siblings() (returns all <tag>'s siblings) and
-# <tag>.find_next_sibling() (returns just the first one); e.g., use the 'div' tag, class='rowline clearfix'.
+# <tag>.find_next_sibling() (returns just the first one);
+# e.g., use the 'div' tag, class='rowline clearfix', and find the first 'span' tag in that div (and then its siblings).
 
 #%%
 # Each bs4.element.ResultSet, bs4.element.Tag,... can be used to create another BeautifulSoup object,
