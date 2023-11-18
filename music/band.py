@@ -338,24 +338,59 @@ else:
 #%%
 # Demonstrate working with files
 
-# theBeatles = Band('The Beatles', *[johnLennon, paulMcCartney, georgeHarrison, ringoStarr],
-#                   start=date(1957, 7, 6), end=date(1970, 4, 10))
-# theRollingStones = Band('The Rolling Stones', *[mickJagger, keithRichards, ronWood],
-#                         start=date(1962, 7, 12))
-# pinkFloyd = Band('Pink Floyd', *[sydBarrett, davidGilmour, rogerWaters, nickMason, rickWright])
-#
-# bands = [theBeatles, theRollingStones, pinkFloyd]
+theBeatles = Band('The Beatles', *[johnLennon, paulMcCartney, georgeHarrison, ringoStarr],
+                  start=date(1957, 7, 6), end=date(1970, 4, 10))
+theRollingStones = Band('The Rolling Stones', *[mickJagger, keithRichards, ronWood],
+                        start=date(1962, 7, 12))
+pinkFloyd = Band('Pink Floyd', *[sydBarrett, davidGilmour, rogerWaters, nickMason, rickWright])
+
+bands = [theBeatles, theRollingStones, pinkFloyd]
 
 #%%
 # Writing to a text file - <outfile>.write(str(<obj>), <outfile>.writelines([str(<obj>)+'\n' for <obj> in <objs>])
 
+# print(type(get_data_dir()))
+# print(get_data_dir())
+file = get_data_dir() / 'bands.txt'
+with open(file, 'w') as f:
+    # f.write(str(theRollingStones))
+    f.writelines('\n'.join([str(b) for b in bands]))
+print('Done.')
+
 #%%
 # Demonstrate reading from a text file - <infile>.read(), <infile>.readline(), <infile>.readlines()
+
+file = get_data_dir() / 'bands.txt'
+with open(file, 'r') as f:
+    # b = f.readlines()                             # returns a list of lines
+    # b = f.read()                                  # returns just lines, as one big string
+    # print(b)
+    lines = ''
+    while True:
+        line = f.readline()
+        if line:
+            lines += line
+        else:
+            break
+print(lines)
+
 
 #%%
 # Demonstrate writing to a binary file - pickle.dump(<obj>, <outfile>)
 
+file = get_data_dir() / 'bands'
+with open(file, 'wb') as f:
+    pickle.dump(bands, f)
+print('Done.')
+
 #%%
 # Demonstrate reading from a binary file - pickle.load(<infile>)
+
+file = get_data_dir() / 'bands'
+with open(file, 'rb') as f:
+    b = pickle.load(f)
+# print(b)
+for band in b:
+    print(band)
 
 

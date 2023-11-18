@@ -421,7 +421,14 @@ bob.tell()
 #%%
 # Single object
 from json_tricks import loads, dumps
+keith = Musician('Keith Richards')
+keith_json = dumps(keith, indent=4)
+print(keith == loads(keith_json))
 
 #%%
 # List of objects
 from json_tricks import loads, dumps
+mick_and_keith = [mick, keith]
+# print(mick)
+mick_and_keith_json = dumps(mick_and_keith, indent=4)
+print(mick_and_keith == loads(mick_and_keith_json))
