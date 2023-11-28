@@ -64,7 +64,7 @@ def get_soup(url: str) -> BeautifulSoup:
 
 #%%
 # Demonstrate getting values of tag attributes,
-# e.g. <BeautifulSoup object>.find('<tag>').text for an 'a' tag and for a 'visually-hidden' tag.
+# e.g. <BeautifulSoup object>.find('<tag>').text for an 'a' tag and for a 'span' tag (e.g., class='visually-hidden').
 
 #%%
 # Demonstrate <BeautifulSoup object>.find_all(<tag>), e.g. for the 'article' tag; returns a ResultSet object.
