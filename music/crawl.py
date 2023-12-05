@@ -278,10 +278,14 @@ len(articles)
 def get_specific_page(start_url: str, page=1):
     """Returns a specific page from a Website where long lists of items are split in multiple pages.
     """
+    if page > 1:
+        return start_url.split('&searchpage=')[0] + '&searchpage=' + str(page)
+    return start_url.split('&searchpage=')[0]
 
 
 #%%
 # Test get_specific_page(start_url, page)
+print(get_specific_page(start_url, 2))
 
 
 #%%
@@ -296,9 +300,13 @@ def get_next_soup(start_url: str, page=1):
     into a BeautifulSoup object.
     """
 
+    return get_soup(get_specific_page(start_url, page))
+
 
 #%%
 # Test get_next_soup(start_url: str, page=1)
+soup2 = get_next_soup(start_url, 2)
+print(soup2.article.text)
 
 
 #%%
@@ -313,9 +321,13 @@ def get_next_soup_selenium(start_url: str, page=1):
     into a BeautifulSoup object.
     """
 
+    return get_soup_selenium(get_specific_page(start_url, page))
+
 
 #%%
 # Test get_next_soup_selenium(start_url: str, page=1)
+soup2 = get_next_soup_selenium(start_url, 2)
+print(soup2.article.text)
 
 
 #%%
@@ -326,9 +338,21 @@ def crawl(url: str, max_pages=1):
     Parameters: the url of the starting page and the max number of pages to crawl in case of multipage lists.
     """
 
+    page = 0
+    while page < max_pages:
+        yield get_next_soup_selenium(url, page+1)
+        page += 1
+
 
 #%%
 # Test crawl(url: str, max_pages=1)
+next_soup = crawl(start_url, 3)
+while True:
+    try:
+        soup = next(next_soup)
+        print(soup.article.a.text)
+    except StopIteration:
+        break
 
 
 #%%
@@ -347,18 +371,54 @@ def get_article_info_list(start_url: str, max_pages=1):
     - article_info_list - the list of article_info tuples for all articles on the site
     """
 
+    article_info_list = []
+    next_soup = crawl(start_url, max_pages)
+    while True:
+        try:
+            soup = next(next_soup)
+            articles = soup.find_all('article')[:-1]
+            for article in articles:
+                div_image = article.findNext('div', {'class': 'article-image-wrapper'})
+                div_content = article.findNext('div', {'class': 'content'})
+                featured_image_url = div_image.a['data-image']
+                article_date = div_content.find('time').text
+                article_author = div_content.find('em').text.split('by')[1].lstrip()
+                article_title = div_content.a.text
+                article_info_list.append((article_title, article_author, article_date, featured_image_url))
+        except StopIteration:
+            break
+    return article_info_list
+
 
 #%%
 # Test get_articles_info(start_url: str, max_pages=1)
 
+# print(soup2.article.findNext('div', {'class': 'article-image-wrapper'}))
+# print(soup2.article.findNext('div', {'class': 'article-image-wrapper'}).a['data-image'])
+# print(soup2.article.findNext('div', {'class': 'content'}).find('time').text)
+# print(soup2.article.findNext('div', {'class': 'content'}).find('em').text)
+# print(soup2.article.findNext('div', {'class': 'content'}).find('em').text.split('by')[1].lstrip())
+# print(soup2.article.findNext('div', {'class': 'content'}).a.text)
+
+article_info_list = get_article_info_list(start_url, 3)
+
+#%%
+for a in article_info_list:
+    print(a)
 
 #%%
 # Put everything in a csv file
 # import csv
-# csv_file = DATA_DIR / 'articles.csv'
+csv_file = DATA_DIR / 'articles.csv'
 # header_row = ['Title', 'Author', 'Date', 'Featured image']
 # with open(csv_file, 'w', newline='', encoding='utf-8') as f:    # newline: avoid blank rows; encoding: enable ш,š...
 #     out = csv.writer(f)
 #     out.writerow(header_row)
 #     out.writerows(article_info_list)
 
+import pandas as pd
+df = pd.DataFrame(article_info_list, columns=['Title', 'Author', 'Date', 'Featured image URL'])
+# df.to_csv('../data/articles.csv')
+df.to_csv(str(csv_file))
+
+# print(str(csv_file))
